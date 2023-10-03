@@ -2,14 +2,23 @@ import json
 
 import pandas as pd
 import streamlit as st
-
+import numpy as np
+import plotly.express as px
+import plotly.graph_objs as go
+from collections import Counter
 
 st.set_page_config(
-    page_title="LLMs MBTI"
+    page_title="LLM MBTI性格测试"
 )
 
 st.markdown(
-    "<h1 style='text-align: center;'>🧸 LLMs MBTI</h1>", 
+    "<h1 style='text-align: center;'>🎭 LLM MBTI性格测试 </h1>", 
+    unsafe_allow_html=True
+)
+st.text(" ")
+st.text(" ")
+st.markdown(
+    "<h5 style='text-align: center;'> 基础模型测试 </h5>", 
     unsafe_allow_html=True
 )
 
@@ -86,6 +95,7 @@ if 'llms_mbti' not in st.session_state:
         open('llms_mbti_report.json', 'r', encoding='utf8')
     )
 
+
     models, mbti, shor_desc = [], [], []
     for llm, details in st.session_state['llms_mbti'].items():
         models.append(llm)
@@ -101,6 +111,11 @@ if 'llms_mbti' not in st.session_state:
         overview_dict
     )
 
+if 'llms_mbti_1024' not in st.session_state:
+    st.session_state['llms_mbti_1024'] = json.load(
+        open('mbti_1024_all_model.json', 'r', encoding='utf8')
+    )
+
     #mbti_questions_dict = json.load(open('mbti_questions.json', 'r', encoding='utf8'))
     #convert_dict = {
     #    'MBTI测试题（93道）': [ele['question'] for ele in mbti_questions_dict.values()]
@@ -114,7 +129,7 @@ st.dataframe(
 )
 
 
-with st.expander('📚 MBTI 简介', expanded=True):
+with st.expander('📚 MBTI 简介', expanded=False):
     st.markdown(":blue[MBTI 把性格分析4个维度，每个维度上的包含相互对立的 2 种偏好。]")
     st.code("""
 1.  外向E—内向I： 代表着各人不同的精力（Energy）来源
@@ -165,36 +180,74 @@ with st.expander('🧠 LLMs 性格详情', expanded=True):
     st.markdown(MBTI_DESCRIPTIONS[model_mbti]['featrues'])
     st.markdown('---')
 
-    groups = [
-        ('E', 'I'),
-        ('S', 'N'),
-        ('T', 'F'),
-        ('J', 'P'),
-    ]
+    # groups = [
+    #     ('E', 'I'),
+    #     ('S', 'N'),
+    #     ('T', 'F'),
+    #     ('J', 'P'),
+    # ]
 
-    for group in groups:
-        ele1 = st.session_state['llms_mbti'][select_model]['details'][group[0]]
-        ele2 = st.session_state['llms_mbti'][select_model]['details'][group[1]]
-        total = ele1 + ele2
+    # for group in groups:
+    #     ele1 = st.session_state['llms_mbti'][select_model]['details'][group[0]]
+    #     ele2 = st.session_state['llms_mbti'][select_model]['details'][group[1]]
+    #     total = ele1 + ele2
 
-        ele1_percentage = ele1 / total
-        ele2_percentage = ele2 / total
+    #     ele1_percentage = ele1 / total
+    #     ele2_percentage = ele2 / total
 
-        total_width = 16
-        ele1_width = int(total_width * ele1_percentage)
-        ele2_width = total_width - ele1_width
+    #     total_width = 16
+    #     ele1_width = int(total_width * ele1_percentage)
+    #     ele2_width = total_width - ele1_width
 
-        c1, c2 = st.columns([ele1_width, ele2_width])
-        with c1:
-            if ele1_width > ele2_width:
-                st.success(f'{group[0]}（{ele1}，{round(ele1_percentage * 100, 1)} %）')
-            else:
-                st.error(f'{group[0]}（{ele1}，{round(ele1_percentage * 100, 1)} %）')
-        with c2:
-            if ele1_width <= ele2_width:
-                st.success(f'{group[1]}（{ele2}，{round(ele2_percentage * 100, 1)} %）')
-            else:
-                st.error(f'{group[1]}（{ele2}，{round(ele2_percentage * 100, 1)} %）')
+    #     c1, c2 = st.columns([ele1_width, ele2_width])
+    #     with c1:
+    #         if ele1_width > ele2_width:
+    #             st.success(f'{group[0]}（{ele1}，{round(ele1_percentage * 100, 1)} %）')
+    #         else:
+    #             st.error(f'{group[0]}（{ele1}，{round(ele1_percentage * 100, 1)} %）')
+    #     with c2:
+    #         if ele1_width <= ele2_width:
+    #             st.success(f'{group[1]}（{ele2}，{round(ele2_percentage * 100, 1)} %）')
+    #         else:
+    #             st.error(f'{group[1]}（{ele2}，{round(ele2_percentage * 100, 1)} %）')
+    def mbti_cat(attr):
+        if attr == "E" or attr == "I":
+            return "E-I"
+        elif attr == "S" or attr == "N":
+            return "S-N"
+        elif attr == "T" or attr == "F":
+            return "T-F"
+        elif attr == "J" or attr == "P":
+            return "J-P"
+        else:
+            return None
+    
+    def mbti_expand(attr):
+        if attr == "E":
+            return "外向"
+        elif attr == "I":
+            return "内向"
+        elif attr == "S":
+            return "感觉"
+        elif attr == "N":
+            return "直觉"
+        elif attr == "T":
+            return "思考"
+        elif attr == "F":
+            return "情感"
+        elif attr == "J":
+            return "判断"
+        elif attr == "P":
+            return "感知"
+        
+    df = pd.DataFrame(st.session_state['llms_mbti'][select_model]["details"].items(), columns=["attr", 'val'])
+    df["mbti_pair"] = df["attr"].apply(mbti_cat)
+    df["mbti_full"] = df["attr"].apply(mbti_expand)
+    # tight layout
+    fig = px.sunburst(df, path=["mbti_pair", "mbti_full"], values='val')
+    fig.update_layout(margin = dict(t=0, l=0, r=0, b=0))
+    # Plot!
+    st.plotly_chart(fig, use_container_width=True)
 
 
 #st.dataframe(
@@ -202,3 +255,49 @@ with st.expander('🧠 LLMs 性格详情', expanded=True):
 #    use_container_width=True,
 #    height=800
 #)
+st.text(" ")
+st.text(" ")
+st.markdown(
+    "<h5 style='text-align: center;'> 16性格-1024身份 测试分布 </h5>", 
+    unsafe_allow_html=True
+)
+
+with st.expander('📊 性格身份 详情分布', expanded=True):
+    
+    select_model_1024 = st.selectbox(
+        '选择模型查看详情',
+        st.session_state['llms_mbti_1024'].keys()
+
+    )
+    st.markdown('---')
+    st.markdown("16性格预期和模型的分布")
+    selected_dict = st.session_state['llms_mbti_1024'][select_model_1024]
+    ind_list = list(selected_dict.keys())
+    df_1024 = pd.DataFrame({
+    "index" : ind_list,
+    "name" : [selected_dict[i]["name"] for i in ind_list],
+    "expected" : [selected_dict[i]["expected"] for i in ind_list],
+    "ans" : [selected_dict[i]["ans"] for i in ind_list]
+    })
+
+    def shared_chars(s1, s2):
+        return sum((Counter(s1) & Counter(s2)).values())
+
+    df_1024["hit"] = df_1024.apply(lambda x: shared_chars(x.expected, x.ans), axis=1)
+    df_1024['val'] = 1
+    # st.dataframe(df_1024)
+    fig_bar = go.Figure()
+    fig_bar.add_trace(go.Histogram(x=df_1024["expected"], name='Expected'))
+    fig_bar.add_trace(go.Histogram(x=df_1024["ans"], name='Model'))
+    # Overlay both histograms
+    fig_bar.update_layout(xaxis_title_text='Personality',yaxis_title_text="Count", barmode='overlay')
+    # Reduce opacity to see both histograms
+    fig_bar.update_traces(opacity=0.6)
+    st.plotly_chart(fig_bar, use_container_width=True)
+
+    st.markdown('---')
+    st.markdown("4维度的准确率以及答案分布")
+
+    fig_sb = px.sunburst(df_1024, path=["hit", "ans", "expected"], values='val')
+    fig_sb.update_layout(margin = dict(t=0, l=0, r=0, b=0))
+    st.plotly_chart(fig_sb, use_container_width=True)

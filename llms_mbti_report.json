@@ -12,18 +12,18 @@
         },
         "res": "ENTJ"
     },
-    "baichuan-13b": {
+    "llama2-7b": {
         "details": {
-            "E": 9,
-            "I": 12,
+            "E": 10,
+            "I": 11,
             "S": 12,
-            "N": 15,
-            "T": 11,
-            "F": 12,
-            "J": 11,
-            "P": 11
+            "N": 14,
+            "T": 10,
+            "F": 14,
+            "J": 15,
+            "P": 7
         },
-        "res": "INFP"
+        "res": "INFJ"
     },
     "llama2-13b": {
         "details": {
@@ -37,53 +37,5 @@
             "P": 9
         },
         "res": "ISFJ"
-    },
-    "llama2-7b-supporter-ISFJ": {
-        "details": {
-            "E": 13,
-            "I": 8,
-            "S": 12,
-            "N": 14,
-            "T": 5,
-            "F": 19,
-            "J": 12,
-            "P": 10
-        },
-        "res": "ENFJ"},
-    "llama2-7b-supporter-ENTP": {
-            "details": {
-                "E": 13,
-                "I": 8,
-                "S": 11,
-                "N": 15,
-                "T": 8,
-                "F": 16,
-                "J": 12,
-                "P": 10
-            },
-            "res": "ENFJ"},
-    "llama2-7b-supporter-ESFJ": {
-                "details": {
-                    "E": 12,
-                    "I": 9,
-                    "S": 11,
-                    "N": 15,
-                    "T": 4,
-                    "F": 20,
-                    "J": 12,
-                    "P": 10
-                },
-                "res": "ENFJ"},
-    "llama2-7b-supporter-INTP": {
-                    "details": {
-                        "E": 12,
-                        "I": 9,
-                        "S": 11,
-                        "N": 15,
-                        "T": 7,
-                        "F": 17,
-                        "J": 11,
-                        "P": 11
-                    },
-                    "res": "ENFP"}
+    }
 }
