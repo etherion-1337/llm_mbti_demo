@@ -306,6 +306,7 @@ with st.expander('📊 性格身份 详情分布', expanded=True):
     fig_rand = go.Figure()
     fig_rand.add_trace(go.Histogram(x=df_1024["hit"], name='Model Predictions'))
     fig_rand.add_trace(go.Histogram(x=pd.Series(np.array([0]*64 + [1]*256 + [2]*384 + [3]*256 + [4]*64)), name='Random Guesses'))
+    fig_rand.add_trace(go.Histogram(x=pd.Series(np.array([0]*1 + [1]*16 + [2]*105 + [3]*353 + [4]*549)), name='ChatGPT-3.5'))
     # Overlay both histograms
     fig_rand.update_layout(xaxis_title_text='Number of Correct Dimension',yaxis_title_text="Count")
     # Reduce opacity to see both histograms
