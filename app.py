@@ -301,3 +301,13 @@ with st.expander('📊 性格身份 详情分布', expanded=True):
     fig_sb = px.sunburst(df_1024, path=["hit", "ans", "expected"], values='val')
     fig_sb.update_layout(margin = dict(t=0, l=0, r=0, b=0))
     st.plotly_chart(fig_sb, use_container_width=True)
+
+    st.markdown('---')
+    fig_rand = go.Figure()
+    fig_rand.add_trace(go.Histogram(x=df_1024["hit"], name='Model Predictions'))
+    fig_rand.add_trace(go.Histogram(x=pd.Series(np.array([0]*64 + [1]*256 + [2]*384 + [3]*256 + [4]*64)), name='Random Guesses'))
+    # Overlay both histograms
+    fig_rand.update_layout(xaxis_title_text='Number of Correct Dimension',yaxis_title_text="Count")
+    # Reduce opacity to see both histograms
+    fig_rand.update_traces(opacity=0.6)
+    st.plotly_chart(fig_rand, use_container_width=True)
