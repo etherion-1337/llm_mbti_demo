@@ -38,6 +38,19 @@
         },
         "res": "ISFJ"
     },
+    "llama2-13b-chat": {
+        "details": {
+            "E": 10,
+            "I": 11,
+            "S": 10,
+            "N": 16,
+            "T": 6,
+            "F": 18,
+            "J": 13,
+            "P": 9
+        },
+        "res": "INFJ"
+    },
     "llama2-13b-empdia-xyg": {
         "details": {
             "E": 8,
