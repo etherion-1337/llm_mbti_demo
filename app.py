@@ -296,13 +296,17 @@ with st.expander('📊 性格身份 详情分布', expanded=True):
     st.plotly_chart(fig_bar, use_container_width=True)
 
     st.markdown('---')
-    st.markdown("4维度的准确率以及答案分布")
+    st.markdown("4维度的准确率以及答案分布 可点击展开")
+    st.text("第一圈：答对维度")
+    st.text("第二圈：模型回答")
+    st.text("第三圈：预期答案")
 
     fig_sb = px.sunburst(df_1024, path=["hit", "ans", "expected"], values='val')
     fig_sb.update_layout(margin = dict(t=0, l=0, r=0, b=0))
     st.plotly_chart(fig_sb, use_container_width=True)
 
     st.markdown('---')
+    st.markdown("4维度答对的正确数比较")
     fig_rand = go.Figure()
     fig_rand.add_trace(go.Histogram(x=df_1024["hit"], name='Model Predictions'))
     fig_rand.add_trace(go.Histogram(x=pd.Series(np.array([0]*64 + [1]*256 + [2]*384 + [3]*256 + [4]*64)), name='Random Guesses'))
