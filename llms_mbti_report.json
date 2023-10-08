@@ -76,5 +76,18 @@
             "P": 11
         },
         "res": "INFP"
+    },
+    "llama2-13b-lora-1000-fastchat-vt-cwl": {
+        "details": {
+            "E": 7,
+            "I": 14,
+            "S": 7,
+            "N": 19,
+            "T": 2,
+            "F": 22,
+            "J": 14,
+            "P": 8
+        },
+        "res": "INFJ"
     }
 }
