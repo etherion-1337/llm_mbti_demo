@@ -89,5 +89,18 @@
             "P": 8
         },
         "res": "INFJ"
+    },
+    "llama2-13b-lora-1000-fastchat-4-1k-jxy": {
+        "details": {
+            "E": 12,
+            "I": 9,
+            "S": 10,
+            "N": 16,
+            "T": 3,
+            "F": 21,
+            "J": 12,
+            "P": 10
+        },
+        "res": "ENFJ"
     }
 }
