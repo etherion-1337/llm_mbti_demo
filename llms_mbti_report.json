@@ -90,6 +90,19 @@
         },
         "res": "INFJ"
     },
+    "llama2-13b-lora-1000-efficient-tuning-cwl": {
+        "details": {
+            "E": 8,
+            "I": 13,
+            "S": 11,
+            "N": 15,
+            "T": 5,
+            "F": 19,
+            "J": 15,
+            "P": 7
+        },
+        "res": "INFJ"
+    },
     "llama2-13b-lora-1000-fastchat-4-1k-jxy": {
         "details": {
             "E": 12,
